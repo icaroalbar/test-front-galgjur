@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import * as React from "react";
 import Link from "next/link";
@@ -20,6 +20,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useSearchParams, useRouter } from "next/navigation";
 
 type Inputs = {
   username: string;
@@ -27,9 +28,11 @@ type Inputs = {
 };
 
 export default function Login() {
+  const router = useRouter();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { toast } = useToast();
-
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
   const {
     register,
     handleSubmit,
@@ -39,11 +42,21 @@ export default function Login() {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setIsLoading(true);
     try {
-      const result = await signIn("sign-in", {
+      const result = await signIn("credentials", {
         email: data.username,
         password: data.password,
         redirect: false,
+        callbackUrl
       });
+      if (!result?.error) {
+        router.push(callbackUrl);
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Credenciais incorretas!",
+          description: "Reveja seu email e senha.",
+        });
+      }
     } catch (error) {
       console.log(error);
       toast({

@@ -1,3 +1,4 @@
+'use client'
 import {
   Cloud,
   CreditCard,
@@ -30,6 +31,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
+import { signOut } from "next-auth/react"
 
 const sub = "b11ec497-1624-42b2-be18-c3be66126d77";
 
@@ -119,7 +121,7 @@ export default function Dropdown() {
         </DropdownMenuItem>
         <DropdownMenuSeparator className="bg-slate-300" />
         <DropdownMenuItem className="transition-colors hover:bg-slate-200">
-          <LogOut className="mr-2 h-4 w-4" />
+          <LogOut className="mr-2 h-4 w-4" onClick={() => signOut({redirect: false, callbackUrl: "/"})}/>
           <span>Log out</span>
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
