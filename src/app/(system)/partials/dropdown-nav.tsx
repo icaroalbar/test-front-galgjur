@@ -31,17 +31,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
-import { signOut } from "next-auth/react";
-
-const sub = "b11ec497-1624-42b2-be18-c3be66126d77";
+import { signOut, useSession } from "next-auth/react";
 
 export default function Dropdown() {
+  const {data: session}: any = useSession();
+  
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="cursor-pointer select-none">
           <AvatarImage
-            src={`https://galgjur-perfil-images.s3.amazonaws.com/${sub}.png`}
+            src={`https://galgjur-perfil-images.s3.amazonaws.com/${session?.id}.png`}
           />
           <AvatarFallback className="bg-slate-300">IA</AvatarFallback>
         </Avatar>
@@ -122,7 +122,7 @@ export default function Dropdown() {
         <DropdownMenuSeparator className="bg-slate-300" />
         <DropdownMenuItem
           className="cursor-pointer transition-colors hover:bg-slate-200"
-          onClick={() => signOut({ callbackUrl: "/" })}
+          onClick={() => signOut({ callbackUrl: "/", redirect: true })}
         >
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
