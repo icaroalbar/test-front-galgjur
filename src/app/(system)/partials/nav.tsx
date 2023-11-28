@@ -40,7 +40,7 @@ const data: menuProps[] = [
   },
 ];
 
-export default function Nav() {
+export default async function Nav() {
   return (
     <nav>
       <div className="container flex items-center justify-between py-3">
@@ -75,34 +75,6 @@ export default function Nav() {
         </div>
       </div>
       <Separator className="bg-slate-400" />
-      {/* <div className="bg-slate-300 py-1 shadow-lg">
-        <div className="container flex items-center justify-between">
-          <Button
-            asChild
-            size="icon"
-            variant={"ghost"}
-            className="hover:bg-transparent/5"
-          >
-            <Link href="/dashboard">
-              <BarChartBig />
-            </Link>
-          </Button>
-          <ul className="flex text-sm">
-            {data.map((item, index) => (
-              <Button
-                key={index}
-                asChild
-                size={"sm"}
-                variant={"ghost"}
-                className="font-light capitalize hover:bg-transparent/5"
-                suppressHydrationWarning
-              >
-                <Link href={`/${item.href}`}>{item.label}</Link>
-              </Button>
-            ))}
-          </ul>
-        </div>
-      </div> */}
     </nav>
   );
 }

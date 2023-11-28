@@ -1,22 +1,21 @@
-import axios from "axios";
-import NextAuth from "next-auth";
-import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import type { NextAuthOptions } from "next-auth";
+import { jwtDecode } from "jwt-decode";
+import NextAuth from "next-auth";
+import axios from "axios";
 
-const api: string = process.env.URL_API;
+const api = String(process.env.API_LOGIN_USERS);
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
-  pages: {
-    signIn: "/",
-  },
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60,
   },
-  jwt: {
-    secret: process.env.NEXTAUTH_SECRET,
+
+  pages: {
+    signIn: "/dashboard",
   },
+
   providers: [
     CredentialsProvider({
       name: "sign-in",
@@ -32,42 +31,47 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
         try {
-          const response = await axios.post(api, {
-            username: credentials.email,
-            password: credentials.password,
-          });
-          const { data } = response;
+          const result = await axios.post(
+            api,
+            {
+              username: credentials.email,
+              password: credentials.password,
+            },
+            {
+              headers: { "Content-Type": "application/json" },
+            },
+          );
 
-          
-          return {
-            id: 123,
-            email: "thomasrubinski@gmail.com",
-            name: "Thomas Rubinski",
-            id_token: data.user.AuthenticationResult.IdToken,
-            access_token: data.user.AuthenticationResult.AccessToken,
-            key: "Você está logado!",
-          };
+          const { data } = result;
+
+          const token = data.user.AuthenticationResult.AccessToken;
+          const decoded = jwtDecode(token);
+          const id = String(decoded.sub);
+
+          return Promise.resolve({
+            id: id,
+            access_token: token,
+          });
         } catch (error) {
           console.error(error);
-          return null;
+          return Promise.resolve(null);
         }
       },
     }),
   ],
+
   callbacks: {
-    jwt: ({ token, user }) => {
+    async jwt({ token, user }) {
       if (user) {
         const u = user as unknown as any;
-        token.id = u.id;
         token.access_token = u.access_token;
-        token.id_token = u.id_token;
+        token.id = u.id;
       }
       return token;
     },
-    session: ({ session, token, user }: any) => {
-      session.id = token.id;
+    async session({ session, token }: any) {
       session.access_token = token.access_token;
-      session.id_token = token.id_token;
+      session.id = token.id;
       return session;
     },
   },
