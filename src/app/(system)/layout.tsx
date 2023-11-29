@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../globals.css";
-import Nav from "./partials/nav";
+import Nav from "./partials/Nav";
 import { NextAuthProvider } from "@/providers/sessionProvider";
 import { ReactNode } from "react";
 import { getServerSession } from "next-auth";

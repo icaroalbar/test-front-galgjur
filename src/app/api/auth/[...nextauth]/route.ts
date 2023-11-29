@@ -7,7 +7,7 @@ import axios from "axios";
 const api = String(process.env.API_LOGIN_USERS);
 
 export const authOptions: NextAuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET,
+  // secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
   },
