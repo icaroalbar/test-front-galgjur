@@ -13,7 +13,6 @@ export const Icon = ({ name, color, size, className }: IconsProps) => {
   const LucideIcon = icons[name];
 
   if (!LucideIcon) {
-    // Lidar com o caso em que o ícone não existe
     return null;
   }
 

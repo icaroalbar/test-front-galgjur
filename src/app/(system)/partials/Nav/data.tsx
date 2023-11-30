@@ -62,8 +62,8 @@ export const data: MenuData = {
     },
     {
       icon: "LifeBuoy",
-      href: "suport",
-      text: "suporte",
+      href: "support",
+      text: "supporte",
     },
   ],
 };

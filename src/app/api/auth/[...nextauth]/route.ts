@@ -1,6 +1,7 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthOptions } from "next-auth";
-import { jwtDecode } from "jwt-decode";
+import * as jwt from "jsonwebtoken";
+
 import NextAuth from "next-auth";
 import axios from "axios";
 
@@ -45,9 +46,10 @@ export const authOptions: NextAuthOptions = {
           const { data } = result;
 
           const token = data.user.AuthenticationResult.AccessToken;
-          const decoded: any = jwtDecode(token);
+          const decoded: any = jwt.decode(token);
           const id = String(decoded.sub);
-          const status = decoded['cognito:groups'][0];
+          const status = decoded["cognito:groups"][0];
+
           return Promise.resolve({
             id: id,
             access_token: token,
