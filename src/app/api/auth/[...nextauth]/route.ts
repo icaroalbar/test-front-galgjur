@@ -45,12 +45,13 @@ export const authOptions: NextAuthOptions = {
           const { data } = result;
 
           const token = data.user.AuthenticationResult.AccessToken;
-          const decoded = jwtDecode(token);
+          const decoded: any = jwtDecode(token);
           const id = String(decoded.sub);
-
+          const status = decoded['cognito:groups'][0];
           return Promise.resolve({
             id: id,
             access_token: token,
+            status: status,
           });
         } catch (error) {
           console.error(error);
@@ -66,12 +67,14 @@ export const authOptions: NextAuthOptions = {
         const u = user as unknown as any;
         token.access_token = u.access_token;
         token.id = u.id;
+        token.status = u.status;
       }
       return token;
     },
     async session({ session, token }: any) {
       session.access_token = token.access_token;
       session.id = token.id;
+      session.status = token.status;
       return session;
     },
   },
