@@ -1,5 +1,4 @@
 import CredentialsProvider from "next-auth/providers/credentials";
-import type { NextAuthOptions } from "next-auth";
 import * as jwt from "jsonwebtoken";
 
 import NextAuth from "next-auth";
@@ -7,7 +6,7 @@ import axios from "axios";
 
 const api = String(process.env.API_LOGIN_USERS);
 
-export const authOptions: NextAuthOptions = {
+export const authOptions: any = {
   // secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
@@ -64,7 +63,7 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: any) {
       if (user) {
         const u = user as unknown as any;
         token.access_token = u.access_token;
