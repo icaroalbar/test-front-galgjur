@@ -9,12 +9,13 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import React from "react";
 import { data } from "./data";
 import Icon from "@/lib/icons";
+import { AvatarImage } from "./avatar-image";
 
 export default function Dropdown() {
   const { data: session }: any = useSession();
@@ -25,16 +26,23 @@ export default function Dropdown() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="cursor-pointer select-none">
-          <AvatarImage
-            src={`https://galgjur-perfil-images.s3.amazonaws.com/${session?.id}.png`}
-          />
-          <AvatarFallback className="bg-slate-300">IA</AvatarFallback>
+          <AvatarImage />
+          <AvatarFallback className="bg-slate-300 uppercase">
+            {session?.first_name.charAt(0)}
+            {session?.last_name.charAt(0)}
+          </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>
-          <span>Icaro Albar</span>
-          <p className="text-[0.75rem] uppercase opacity-50">OAB 123456</p>
+          <DropdownMenuItem className="p-0">
+            <span className="capitalize">
+              {session?.first_name} {session?.last_name}
+            </span>
+          </DropdownMenuItem>
+          <p className="text-[0.75rem] uppercase opacity-50">
+            OAB {session?.oab} {session?.state}
+          </p>
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-slate-300" />
         <DropdownMenuGroup>
