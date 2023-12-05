@@ -46,7 +46,7 @@ export const authOptions: any = {
           const access_token = data.user.AuthenticationResult.AccessToken;
           const decoded: any = jwt.decode(access_token);
           const id = String(decoded.sub);
-          const type_user = decoded["cognito:groups"][0];
+          const role = decoded["cognito:groups"][0];
 
           const resultDatabase = await axios.post(
             "http://localhost:8080/login/hello",
@@ -68,7 +68,7 @@ export const authOptions: any = {
           return Promise.resolve({
             id,
             access_token,
-            type_user,
+            role,
             first_name,
             last_name,
             email,
@@ -94,7 +94,7 @@ export const authOptions: any = {
         token.email = u.email;
         token.state = u.state;
         token.oab = u.oab;
-        token.type_user = u.type_user;
+        token.role = u.role;
       }
       return token;
     },
@@ -106,7 +106,7 @@ export const authOptions: any = {
       session.email = token.email;
       session.state = token.state;
       session.oab = token.oab;
-      session.type_user = token.type_user;
+      session.role = token.role;
       return session;
     },
   },
